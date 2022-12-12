@@ -11,7 +11,7 @@ export class ProductsService {
     @InjectRepository(Product) private productRepo: Repository<Product>,
   ) {}
 
-  findAll() {
+  async findAll() {
     return this.productRepo.find();
   }
 
