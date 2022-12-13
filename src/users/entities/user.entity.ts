@@ -1,16 +1,27 @@
 import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
+import { DateAt } from 'src/database/date-at.entity';
+import { JoinColumn, OneToOne } from 'typeorm';
+
+import { Customer } from './customer.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   email: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   password: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 100 })
   role: string;
+
+  @Column(() => DateAt, { prefix: false })
+  register: DateAt;
+
+  @OneToOne(() => Customer, { nullable: true })
+  @JoinColumn()
+  customer: Customer;
 }
