@@ -11,9 +11,25 @@ import { Customer } from './entities/customer.entity';
 
 import { ProductsModule } from '../products/products.module';
 
+import { OrdersController } from './controllers/orders.controller';
+import { OrdersService } from './services/orders.service';
+import { Order } from './entities/order.entity';
+
+import { OrderItemController } from './controllers/order-item.controller';
+import { OrderItemService } from './services/order-item.service';
+import { OrderItem } from './entities/order-item.entity';
+
 @Module({
-  imports: [ProductsModule, TypeOrmModule.forFeature([User, Customer])],
-  controllers: [CustomerController, UsersController],
-  providers: [CustomersService, UsersService],
+  imports: [
+    ProductsModule,
+    TypeOrmModule.forFeature([User, Customer, Order, OrderItem]),
+  ],
+  controllers: [
+    CustomerController,
+    UsersController,
+    OrdersController,
+    OrderItemController,
+  ],
+  providers: [CustomersService, UsersService, OrdersService, OrderItemService],
 })
 export class UsersModule {}

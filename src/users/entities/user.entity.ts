@@ -4,7 +4,7 @@ import { JoinColumn, OneToOne } from 'typeorm';
 
 import { Customer } from './customer.entity';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -22,6 +22,6 @@ export class User {
   register: DateAt;
 
   @OneToOne(() => Customer, { nullable: true })
-  @JoinColumn()
+  @JoinColumn({ name: 'customer_id' })
   customer: Customer;
 }
