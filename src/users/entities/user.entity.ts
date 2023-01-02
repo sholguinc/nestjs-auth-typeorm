@@ -2,6 +2,8 @@ import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
 import { DateAt } from 'src/database/date-at.entity';
 import { JoinColumn, OneToOne } from 'typeorm';
 
+import { Exclude } from 'class-transformer';
+
 import { Customer } from './customer.entity';
 
 @Entity({ name: 'users' })
@@ -12,6 +14,7 @@ export class User {
   @Column({ type: 'varchar', length: 255 })
   email: string;
 
+  @Exclude()
   @Column({ type: 'varchar', length: 255 })
   password: string;
 

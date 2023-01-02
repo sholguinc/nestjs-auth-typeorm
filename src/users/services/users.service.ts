@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
+import * as bcrypt from 'bcrypt';
 
 import { User } from '../entities/user.entity';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
@@ -33,7 +34,11 @@ export class UsersService {
   }
 
   async create(data: CreateUserDto) {
-    const newUser = this.userRepo.create(data);
+    const { password, ...userData } = data;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newData = { ...userData, password: hashedPassword };
+    const newUser = this.userRepo.create(newData);
+
     if (data.customerId) {
       const customer = await this.customersService.findOne(data.customerId);
       newUser.customer = customer;
@@ -58,5 +63,9 @@ export class UsersService {
       user,
       products: await this.productsService.findAll(),
     };
+  }
+
+  async findByEmail(email: string) {
+    return await this.userRepo.findOneBy({ email });
   }
 }
