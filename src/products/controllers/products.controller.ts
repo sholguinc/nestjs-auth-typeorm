@@ -9,6 +9,7 @@ import {
   Delete,
   HttpStatus,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
@@ -19,8 +20,11 @@ import {
   FilterProductDto,
 } from '../dtos/products.dtos';
 import { ProductsService } from './../services/products.service';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { Public } from '../../auth/decorators/public.decorator';
 
 @ApiTags('products')
+@UseGuards(JwtAuthGuard)
 @Controller('products')
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
@@ -36,6 +40,7 @@ export class ProductsController {
   // }
 
   @Get()
+  @Public()
   @ApiOperation({ summary: 'List of products' })
   getProducts(@Query() params?: FilterProductDto) {
     return this.productsService.findAll(params);
@@ -47,6 +52,7 @@ export class ProductsController {
   }
 
   @Get(':productId')
+  @Public()
   @HttpCode(HttpStatus.ACCEPTED)
   getOne(@Param('productId', ParseIntPipe) productId: number) {
     return this.productsService.findOne(productId);
