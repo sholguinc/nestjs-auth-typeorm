@@ -1,27 +1,29 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
-  Query,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
-  Body,
   Put,
-  Delete,
-  HttpStatus,
-  HttpCode,
+  Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ParseIntPipe } from '../../common/parse-int.pipe';
 import {
   CreateProductDto,
-  UpdateProductDto,
   FilterProductDto,
+  UpdateProductDto,
 } from '../dtos/products.dtos';
 import { ProductsService } from './../services/products.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { Public } from '../../auth/decorators/public.decorator';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { Role } from '../../auth/models/roles.model';
 
 @ApiTags('products')
 @UseGuards(JwtAuthGuard)
@@ -58,6 +60,7 @@ export class ProductsController {
     return this.productsService.findOne(productId);
   }
 
+  @Roles(Role.ADMIN)
   @Post()
   create(@Body() payload: CreateProductDto) {
     return this.productsService.create(payload);
